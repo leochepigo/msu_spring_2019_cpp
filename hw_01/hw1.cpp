@@ -34,7 +34,6 @@ int how_much_prime(int left, int right, const int* Data, int Size) {
 	return count;
 }
 
-
 int main(int argc, char* argv[]) {
 	#include "numbers.dat"
 
