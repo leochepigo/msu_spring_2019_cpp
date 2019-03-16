@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <cmath>
+
 using namespace std;
 
 
@@ -24,7 +25,7 @@ int how_much_prime(int left, int right, const int* Data, int Size) {
 	while((Data[end] < right)&& (bgn < Size)) ++end;
 
 	if (Data[bgn]!=left || Data[end] != right || bgn == Size || end == Size) {
-		return 0;
+		return count;
 	}
 
 	for (; bgn <= end; ++bgn) {
