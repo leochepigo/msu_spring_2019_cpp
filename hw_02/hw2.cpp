@@ -38,7 +38,7 @@ string Parser::parse_token() {
 		return number;
 	}
 
-	constexpr const char* tokens[] =	{ "+", "-", "*", "/"};
+	constexpr const char* tokens[] = { "+", "-", "*", "/"};
 	for (auto& t : tokens) {
 		if (strncmp(current_symbol, t, strlen(t)) == 0) {
 			current_symbol += 1;
