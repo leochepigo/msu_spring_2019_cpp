@@ -7,7 +7,7 @@
 using namespace std;
 
 struct Expression {
-    Expression(string token) : token(token) {}
+    	Expression(string token) : token(token) {}
 	Expression(string token, Expression a) : token(token), args{a} {}
 	Expression(string token, Expression a, Expression b) : token(token), args{a, b} {}
 
