@@ -3,13 +3,15 @@
 #include <vector>
 #include <cstring>
 #include <cstdlib>
+#include <limits>
+#define INF numeric_limits<int>::max()
 
 using namespace std;
 
 struct Expression {
-    Expression(string token) : token(token) {}
-	Expression(string token, Expression a) : token(token), args{a} {}
-	Expression(string token, Expression a, Expression b) : token(token), args{a, b} {}
+	Expression(const string& token) : token(token) {}
+	Expression(const string& token, const Expression& a) : token(token), args{a} {}
+	Expression(const string& token, const Expression& a, const Expression& b) : token(token), args{a, b} {}
 
 	string token;
 	vector<Expression> args;
@@ -36,10 +38,10 @@ string Parser::parse_token() {
 		return number;
 	}
 
-	const string tokens[] =	{ "+", "-", "*", "/"};
+	constexpr const char* tokens[] =	{ "+", "-", "*", "/"};
 	for (auto& t : tokens) {
-		if (strncmp(current_symbol, t.c_str(), t.size()) == 0) {
-			current_symbol += t.size();
+		if (strncmp(current_symbol, t, strlen(t)) == 0) {
+			current_symbol += 1;
 			return t;
 		}
 	}
@@ -50,8 +52,7 @@ string Parser::parse_token() {
 Expression Parser::parse_simple_expression() {
 	string token = parse_token();
 	if (token.empty())  {
-		cout << "error";
-		exit(1);
+		return to_string(INF);
 	}
 
 	if (isdigit(token[0]))
@@ -93,40 +94,46 @@ Expression Parser::parse() {
 int calculate(const Expression& e) {
 	switch (e.args.size()) {
 	case 2: {
+
 		int a = calculate(e.args[0]);
 		int b = calculate(e.args[1]);
+		if (a!= INF && b != INF) {
 		if (e.token == "+") return a + b;
 		if (e.token == "-") return a - b;
 		if (e.token == "*") return a * b;
 		if (e.token == "/" && b != 0) return a / b;
-		cout << "error";
-		exit(1);
+		}
+		return INF;
 	}
 
 	case 1: {
 		int a = calculate(e.args[0]);
 		if (e.token == "-") return -a;
-		cout << "error";
-		exit(1);
+		return INF;
 	}
 
 	case 0:
 		return atoi(e.token.c_str());
 	}
-	cout << "error";
-	exit(1);
+
+
+	return INF;
 }
 
 int main(int argc, char* argv[]) {
-
 	if (argc != 2) {
 		cout << "error";
 		return 1;
 	}
 
 	Parser p(argv[1]);
-	cout << calculate(p.parse());
+	int result = calculate(p.parse());
+	if (result == INF) {
+		cout << "error";
+		return 1;
+	}
 
+	cout << result;
 	return 0;
 
 }
