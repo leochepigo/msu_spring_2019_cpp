@@ -116,7 +116,6 @@ int calculate(const Expression& e) {
 		return atoi(e.token.c_str());
 	}
 
-
 	return INF;
 }
 
