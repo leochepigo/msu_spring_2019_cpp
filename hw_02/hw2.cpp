@@ -2,8 +2,7 @@
 #include <string>
 #include <vector>
 #include <cstring>
-#include <cstdlib>
-#include <limits>
+#include <stdexcept>
 
 using namespace std;
 
@@ -51,7 +50,7 @@ string Parser::parse_token() {
 Expression Parser::parse_simple_expression() {
 	string token = parse_token();
 	if (token.empty())  {
-		return to_string(INT_MAX);
+		throw invalid_argument("Invalid argument");
 	}
 
 	if (isdigit(token[0]))
@@ -96,26 +95,25 @@ int calculate(const Expression& e) {
 
 		int a = calculate(e.args[0]);
 		int b = calculate(e.args[1]);
-		if (a!= INT_MAX && b != INT_MAX) {
 		if (e.token == "+") return a + b;
 		if (e.token == "-") return a - b;
 		if (e.token == "*") return a * b;
 		if (e.token == "/" && b != 0) return a / b;
-		}
-		return INT_MAX;
+
+		throw invalid_argument("Invalid argument");
 	}
 
 	case 1: {
 		int a = calculate(e.args[0]);
 		if (e.token == "-") return -a;
-		return INT_MAX;
+		throw invalid_argument("Invalid argument");
 	}
 
 	case 0:
 		return atoi(e.token.c_str());
 	}
 
-	return INT_MAX;
+	throw invalid_argument("Invalid argument");
 }
 
 int main(int argc, char* argv[]) {
@@ -125,13 +123,15 @@ int main(int argc, char* argv[]) {
 	}
 
 	Parser p(argv[1]);
-	int result = calculate(p.parse());
-	if (result == INT_MAX) {
+	try {
+		int result = calculate(p.parse());
+		cout << result;
+		return 0;
+
+	} catch (invalid_argument &exc) {
 		cout << "error";
 		return 1;
 	}
 
-	cout << result;
-	return 0;
-
+	return 1;
 }
