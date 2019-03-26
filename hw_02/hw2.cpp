@@ -4,7 +4,6 @@
 #include <cstring>
 #include <cstdlib>
 #include <limits>
-#define INF numeric_limits<int>::max()
 
 using namespace std;
 
@@ -52,7 +51,7 @@ string Parser::parse_token() {
 Expression Parser::parse_simple_expression() {
 	string token = parse_token();
 	if (token.empty())  {
-		return to_string(INF);
+		return to_string(INT_MAX);
 	}
 
 	if (isdigit(token[0]))
@@ -97,26 +96,26 @@ int calculate(const Expression& e) {
 
 		int a = calculate(e.args[0]);
 		int b = calculate(e.args[1]);
-		if (a!= INF && b != INF) {
+		if (a!= INT_MAX && b != INT_MAX) {
 		if (e.token == "+") return a + b;
 		if (e.token == "-") return a - b;
 		if (e.token == "*") return a * b;
 		if (e.token == "/" && b != 0) return a / b;
 		}
-		return INF;
+		return INT_MAX;
 	}
 
 	case 1: {
 		int a = calculate(e.args[0]);
 		if (e.token == "-") return -a;
-		return INF;
+		return INT_MAX;
 	}
 
 	case 0:
 		return atoi(e.token.c_str());
 	}
 
-	return INF;
+	return INT_MAX;
 }
 
 int main(int argc, char* argv[]) {
@@ -127,7 +126,7 @@ int main(int argc, char* argv[]) {
 
 	Parser p(argv[1]);
 	int result = calculate(p.parse());
-	if (result == INF) {
+	if (result == INT_MAX) {
 		cout << "error";
 		return 1;
 	}
