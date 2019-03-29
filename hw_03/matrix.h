@@ -43,20 +43,20 @@ class Matrix {
 	Row* rows;
 
 public:
-		Matrix(size_t _nrows, size_t _ncols): nrows(_nrows), ncols(_ncols), rows(new Row[_nrows]) {
-			for (size_t i =0; i<_nrows; ++i){
-				rows[i] = Row(_ncols);
-			}
-		};
-		~Matrix() {	delete[] rows; }
+	Matrix(size_t _nrows, size_t _ncols): nrows(_nrows), ncols(_ncols), rows(new Row[_nrows]) {
+		for (size_t i =0; i<_nrows; ++i){
+			rows[i] = Row(_ncols);
+		}
+	};
+	~Matrix() {	delete[] rows; }
 
-		Row& operator[] (size_t n);
-		const Row& operator[] (size_t n) const;
-		Matrix& operator *= (int n);
-		bool operator == (const Matrix& m) const;
-		bool operator != (const Matrix& m) const;
-		size_t getRows() const { return nrows; }
-		size_t getColumns() const { return ncols; }
+	Row& operator[] (size_t n);
+	const Row& operator[] (size_t n) const;
+	Matrix& operator *= (int n);
+	bool operator == (const Matrix& m) const;
+	bool operator != (const Matrix& m) const;
+	size_t getRows() const { return nrows; }
+	size_t getColumns() const { return ncols; }
 };
 
 Row& Matrix::operator[] (size_t n) {
