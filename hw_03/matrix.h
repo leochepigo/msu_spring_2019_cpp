@@ -12,7 +12,7 @@ public:
 
 	int& operator [] (size_t n);
 	const int& operator [] (size_t n) const;
-	const Row& operator = (const Row& row);
+	Row& operator = (const Row& row);
 };
 
 int& Row::operator[] (size_t n) {
@@ -29,7 +29,7 @@ const int& Row::operator[] (size_t n) const {
 	else throw std::out_of_range("");
 }
 
-const Row& Row::operator = (const Row& row) {
+Row& Row::operator = (const Row& row) {
 	ncols = row.ncols;
 	delete[] data;
 	data = new int [row.ncols];
@@ -44,8 +44,9 @@ class Matrix {
 
 public:
 	Matrix(size_t _nrows, size_t _ncols): nrows(_nrows), ncols(_ncols), rows(new Row[_nrows]) {
+		Row temp = Row(_ncols);
 		for (size_t i =0; i<_nrows; ++i){
-			rows[i] = Row(_ncols);
+			rows[i] = temp;
 		}
 	};
 	~Matrix() {	delete[] rows; }
