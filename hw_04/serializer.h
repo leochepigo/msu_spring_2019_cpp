@@ -26,7 +26,6 @@ class Serializer
 
     Error process(bool value)
     {
-        const char* string_v = value ? "true" : "false";
         if (value) out << "true" << Separator;
         else out << "false" << Separator;
 
