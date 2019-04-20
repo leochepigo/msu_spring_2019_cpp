@@ -12,14 +12,13 @@ static constexpr size_t Nmax = 500000;
 void tabble_tennis(string data)
 {
 	for (size_t N = 0; N < Nmax; ++N)
-    {
+	{
 		unique_lock<std::mutex> lock(m);
-        cout << data;
-        c.notify_one();
-        c.wait(lock);
-    }
-
-    c.notify_one();
+		cout << data;
+		c.notify_one();
+		c.wait(lock);
+	}
+	c.notify_one();
 }
 
 int main()
