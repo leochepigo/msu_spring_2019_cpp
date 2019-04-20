@@ -13,7 +13,7 @@ void tabble_tennis(string data)
 {
 	for (size_t N = 0; N < Nmax; ++N)
 	{
-		unique_lock<std::mutex> lock(m);
+		unique_lock<mutex> lock(m);
 		cout << data;
 		c.notify_one();
 		c.wait(lock);
