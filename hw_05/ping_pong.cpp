@@ -9,31 +9,23 @@ static atomic<bool> Ping(true);
 
 void ping()
 {
-	size_t N = 0;
-	while(true) {
-		if (N < Nmax) {
-			if (Ping) {
-				cout << "ping\n";
-				++N;
-				Ping = false;
-			}
+	for (size_t N = 0; N < Nmax;) {
+		if (Ping) {
+			cout << "ping\n";
+			++N;
+			Ping = false;
 		}
-		else break;
 	}
 }
 
 void pong()
 {
-	size_t N = 0;
-	while(true) {
-		if (N < Nmax) {
-			if (!Ping) {
-				cout << "pong\n";
-				++N;
-				Ping = true;
-			}
+	for (size_t N = 0; N < Nmax;) {
+		if (!Ping) {
+			cout << "pong\n";
+			++N;
+			Ping = true;
 		}
-		else break;
 	}
 }
 
