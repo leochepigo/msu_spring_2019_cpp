@@ -1,30 +1,46 @@
 #include <iostream>
 #include <thread>
-#include <mutex>
-#include <condition_variable>
+#include <atomic>
 
 using namespace std;
 
-static mutex m;
-static condition_variable c;
-static constexpr size_t Nmax = 500000;
+static constexpr size_t Nmax = 500'000;
+static atomic<bool> Ping(true);
 
-void tabble_tennis(string data)
+void ping()
 {
-	for (size_t N = 0; N < Nmax; ++N)
-	{
-		unique_lock<mutex> lock(m);
-		cout << data;
-		c.notify_one();
-		c.wait(lock);
+	size_t N = 0;
+	while(true) {
+		if (N < Nmax) {
+			if (Ping) {
+				cout << "ping\n";
+				++N;
+				Ping = false;
+			}
+		}
+		else break;
 	}
-	c.notify_one();
+}
+
+void pong()
+{
+	size_t N = 0;
+	while(true) {
+		if (N < Nmax) {
+			if (!Ping) {
+				cout << "pong\n";
+				++N;
+				Ping = true;
+			}
+		}
+		else break;
+	}
 }
 
 int main()
 {
-	thread t1(tabble_tennis,"ping\n");
-	thread t2(tabble_tennis,"pong\n");
+	thread t1(ping);
+	thread t2(pong);
 
 	t1.join();
 	t2.join();
