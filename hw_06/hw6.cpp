@@ -80,6 +80,7 @@ void merge_sort(ifstream &file, int thread_id) {
 		if (v.empty()) {
 			break;
 		}
+
 		sort(v.begin(), v.end());
 		++count;
 		ofstream out(prefix + to_string(count), ios::binary);
@@ -88,14 +89,10 @@ void merge_sort(ifstream &file, int thread_id) {
 		m.unlock();
 		this_thread::yield();
 	}
-
 	merge(prefix, count);
-
 }
 
-
 int main() {
-
 	ifstream fin("input", ios::binary);
 	thread th_1(merge_sort, ref(fin), 1);
 	thread th_2(merge_sort, ref(fin), 2);
@@ -110,6 +107,5 @@ int main() {
 	merge(prefix,2);
 
 	return 0;
-
 }
 
