@@ -12,6 +12,33 @@ using namespace std;
 constexpr uint64_t SIZE = 1000000;
 mutex m;
 
+void sort_all(string& prefix, int count) {
+	for (int i = 1; i <= count; ++i) {
+		string f_name = prefix + to_string(i);
+		string tmp_name = prefix+'t';
+		ifstream in(f_name, ios::binary);
+		ofstream tmp(tmp_name, ios::binary);
+
+		uint64_t x;
+		vector<uint64_t> v;
+
+		for(size_t i = 0; i < SIZE; ++i) {
+			in.read((char*)(&x), sizeof(x));
+			if(in.eof()) {
+				break;
+			}
+			v.push_back(x);
+		}
+		sort(v.begin(), v.end());
+		tmp.write((char*)v.data(), v.size() * sizeof(uint64_t));
+
+		in.close();
+		tmp.close();
+		remove(f_name.c_str());
+		rename(tmp_name.c_str(), f_name.c_str());
+	}
+}
+
 void merge(string& prefix, int count) {
 	for (int i = 2; i <= count; ++i) {
 		string f1_name = prefix+'1';
@@ -67,28 +94,26 @@ void merge_sort(ifstream &file, int thread_id) {
 	while(!file.eof()) {
 		m.lock();
 		uint64_t x;
-		vector<uint64_t> v;
+		++count;
+		ofstream out(prefix + to_string(count), ios::binary);
+		size_t i = 0;
 
-		for(size_t i = 0; i < SIZE; ++i) {
+		for(; i < SIZE; ++i) {
 			file.read((char*)(&x), sizeof(x));
 			if(file.eof()) {
 				break;
 			}
-			v.push_back(x);
+			out.write((char*)(&x), sizeof(x));
 		}
 
-		if (v.empty()) {
+		if (i==0) {
 			break;
 		}
-
-		sort(v.begin(), v.end());
-		++count;
-		ofstream out(prefix + to_string(count), ios::binary);
-		out.write((char*)v.data(), v.size() * sizeof(uint64_t));
 
 		m.unlock();
 		this_thread::yield();
 	}
+	sort_all(prefix, count);
 	merge(prefix, count);
 }
 
