@@ -86,8 +86,6 @@ void merge_sort(ifstream &file, int thread_id) {
 		++count;
 		ofstream out(prefix + to_string(count), ios::binary);
 		out.write((char*)v.data(), v.size() * sizeof(uint64_t));
-
-		this_thread::yield();
 	}
 	merge(prefix, count);
 }
